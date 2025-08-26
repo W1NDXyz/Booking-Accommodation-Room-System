@@ -1,15 +1,23 @@
 <?php
-include('config.php');
+include('../config.php');
+include('session.php');
 
-$sql_room = "SELECT * FROM room WHERE room_status = 'Active' ORDER BY room_id ASC";
+$sql_room = "SELECT * FROM room";
 if($result_room = $connect->query($sql_room))
 {
-	$data_room = array();
-	while($rows_room = $result_room->fetch_assoc())
-	{
-		$data_room[] = $rows_room;
-	}
 	$total_room = $result_room->num_rows;
+}
+
+$sql_user = "SELECT * FROM user";
+if($result_user = $connect->query($sql_user))
+{
+	$total_user = $result_user->num_rows;
+}
+
+$sql_booking = "SELECT * FROM booking";
+if($result_booking = $connect->query($sql_booking))
+{
+	$total_booking = $result_booking->num_rows;
 }
 ?>
 <!DOCTYPE html>
@@ -24,29 +32,68 @@ if($result_room = $connect->query($sql_room))
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="<?php echo $link;?>/assets/vendors/core/core.css">
 <link rel="stylesheet" href="<?php echo $link;?>/assets/fonts/feather-font/css/iconfont.css">
-<link rel="stylesheet" href="<?php echo $link;?>/assets/css/demo3/style.css">
+<link rel="stylesheet" href="<?php echo $link;?>/assets/css/demo1/style.css">
 <link rel="shortcut icon" href="<?php echo $link;?>/assets/images/favicon.png" />
 </head>
 <body>
 <div class="main-wrapper">
-	<?php include('navbar.php');?>
+	<?php include('sidebar.php');?>
 	<div class="page-wrapper">
+		<?php include('navbar.php');?>
 		<div class="page-content">
+			<nav class="page-breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="<?php echo $link.'/admin/index.php';?>">Dashboard</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+				</ol>
+			</nav>
 			<div class="row">
-				<div class="col-md-12 grid-margin text-center">
-					<h2>Our Rooms</h2>
-				</div>
-				<?php if($total_room>0) { foreach($data_room as $rows_room) { ?>
-				<div class="col-md-3 grid-margin stretch-card">
-					<div class="card text-center">
-						<img src="<?php echo $link.'/uploads/room/'.$rows_room['room_image'];?>" class="card-img-top">
-						<div class="card-body">
-							<h5 class="card-title"><?php echo $rows_room['room_name'];?></h5>
-							<a href="<?php echo $link.'/booking.php?id='.$rows_room['room_id'].'&month='.date('m').'&year='.date('Y');?>" class="btn btn-primary d-block">Book Now</a>
+				<div class="col-12 col-xl-12 stretch-card">
+					<div class="row flex-grow-1">
+						<div class="col-md-4 grid-margin stretch-card">
+							<div class="card text-center">
+								<div class="card-body">
+									<div class="mb-2">
+										<h6 class="card-title mb-0">Total Rooms</h6>
+									</div>
+									<div class="row">
+										<div class="col-12 col-md-12 col-xl-12">
+											<h3><?php echo $total_room;?></h3>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 grid-margin stretch-card">
+							<div class="card text-center">
+								<div class="card-body">
+									<div class="mb-2">
+										<h6 class="card-title mb-0">Total Users</h6>
+									</div>
+									<div class="row">
+										<div class="col-12 col-md-12 col-xl-12">
+											<h3><?php echo $total_user;?></h3>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4 grid-margin stretch-card">
+							<div class="card text-center">
+								<div class="card-body">
+									<div class="mb-2">
+										<h6 class="card-title mb-0">Total Bookings</h6>
+									</div>
+									<div class="row">
+										<div class="col-12 col-md-12 col-xl-12">
+											<h3><?php echo $total_booking;?></h3>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<?php } } ?>
 			</div>
 		</div>
 		<?php include('footer.php');?>
